@@ -1,0 +1,46 @@
+plugins {
+    id 'java'
+}
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    restAssuredVersion = '3.3.0'
+    jacksonVersion = '2.10.0'
+    testNgVersion = '6.13'
+    javaFakerVersion = '1.0.1'
+    logBackVersion = '1.2.3'
+    slf4jVersion = '1.7.29'
+}
+
+dependencies {
+    compile "io.rest-assured:rest-assured:$restAssuredVersion"
+    compile "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
+    compile "com.github.javafaker:javafaker:$javaFakerVersion"
+    compile "ch.qos.logback:logback-core:$logBackVersion"
+    compile "ch.qos.logback:logback-classic:$logBackVersion"
+    compile "org.slf4j:slf4j-api:$slf4jVersion"
+    testCompile "org.testng:testng:$testNgVersion"
+}
+
+test {
+    useTestNG()
+    scanForTestClasses = false
+    include '**/*'
+
+    testLogging {
+        events "PASSED", "FAILED", "SKIPPED"
+        showStandardStreams = true
+        exceptionFormat = 'full'
+    }
+
+    test.outputs.upToDateWhen { false }
+
+    beforeTest { descriptor ->
+        logger.lifecycle("Gradle running test: ${descriptor}")
+    }
+}
